@@ -1,0 +1,98 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuración de Paquetes
+\documentclass{article}
+\input{config_packages} % Incluir configuración de paquetes y encabezado
+\input{config_listings} % Incluir configuración de listings
+\input{config_mdframed} % Incluir configuración de mdframed
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancy}
+
+%Configuraciones adicionales
+\binoppenalty=\maxdimen 
+\relpenalty=\maxdimen 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Condiguracion de encabezado y pie de página
+\lhead{Author's name}
+\rhead{document's title} 
+\chead{\textbf{topic's name}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%Ejemplo códigos
+\section*{Code examples}
+\subsection*{Haskell}
+\begin{haskell}
+import Data.Ratio ( (%) )
+import GHC.Real ( Ratio((:%)) )
+import Data.Function ( on )
+import Data.List ( intercalate )
+import GHC.Float.RealFracMethods ( truncateDoubleInteger )
+import Data.Char ( isSpace )
+
+data Number = NumZ Integer | NumQ (Ratio Integer) | NumR Double | NumFD { x :: Double, x' :: Double }
+
+limit_denominator :: Number -> Number -> Number
+limit_denominator (NumZ lim) (NumQ frac@(_:%d)) =
+  if lim <= 0 then NumZ 0 else
+    if d <= lim then NumQ frac else
+      NumQ $ limit (0, 1, 1, 0) lim frac
+  where
+    limit (p0, q0, p1, q1) lim frac@(n:%d) =
+      let a = n `quot` d
+          q2 = q0 + a * q1
+      in if q2 > lim
+        then
+          let k = (lim - q0) `quot` q1
+              bound1 = (p0 + k * p1) % (q0 + k * q1)
+              bound2 = p1 % q1
+          in if abs (bound2 - frac) <= abs (bound1 - frac)
+            then bound2 else bound1
+        else
+          limit (p1, q1, p0 + a * p1, q2) lim (d :% (n - a * d))
+\end{haskell}
+
+\subsection*{C}
+\begin{c_code}
+    int nesimo_primo(int n) {
+        int contador_primos = 0; // Cantidad de primos encontrados hasta el momento
+        int candidato = 2; // Numero que estamos probando
+        while (contador_primos < n) { 
+            if (es_primo(candidato)) { // Si el numero es primo
+                contador_primos++; // Encontre un primo mas
+            }
+            candidato++; // Pruebo con el siguiente numero
+        }
+        return candidato - 1; // El ultimo numero que probe es el n-esimo primo
+    }
+\end{c_code}
+
+\newpage
+\subsection*{Python}
+\begin{python_code}
+def nesimo_primo(n):
+    contador_primos = 0 # Cantidad de primos encontrados hasta el momento
+    candidato = 2 # Numero que estamos probando
+    while contador_primos < n:
+        if es_primo(candidato): # Si el numero es primo
+            contador_primos += 1 # Encontre un primo mas
+        candidato += 1 # Pruebo con el siguiente numero
+    return candidato - 1 # El ultimo numero que probe es el n-esimo primo
+\end{python_code}
+
+\section*{Frames}
+\begin{theorem}{1.1}
+    Sea $f$ una función continua en el intervalo $[a, b]$. Entonces, $f$ es integrable en $[a, b]$.
+\end{theorem}
+
+\begin{problem}{1.2}
+    Sea $f$ una función continua en el intervalo $[a, b]$. Entonces, $f$ es integrable en $[a, b]$.
+\end{problem}
+
+\begin{remark}
+    Sea $f$ una función continua en el intervalo $[a, b]$. Entonces, $f$ es integrable en $[a, b]$.
+\end{remark}
+
+\end{document}
