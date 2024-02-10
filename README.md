@@ -21,7 +21,7 @@ This LaTeX Academic Template is designed to provide a clean and professional for
 
 1. Clone or download the repository.
 2. Navigate to the `src` folder to find the LaTeX source code.
-3. Customize the document by modifying the relevant sections in the main LaTeX file (`main.tex`).
+3. Customize the document by modifying the relevant sections in the main LaTeX file (`academic-document.tex`).
 
 Feel free to adjust the template according to your specific requirements and preferences.
 
